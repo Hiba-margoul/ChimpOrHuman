@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 220 70% 8%;
+    --foreground: 220 15% 95%;
+
+    --card: 220 50% 12%;
+    --card-foreground: 220 15% 95%;
+
+    --popover: 220 50% 10%;
+    --popover-foreground: 220 15% 95%;
+
+    --primary: 270 60% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 40% 18%;
+    --secondary-foreground: 220 15% 95%;
+
+    --muted: 220 40% 15%;
+    --muted-foreground: 220 15% 65%;
+
+    --accent: 160 70% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 30% 20%;
+    --input: 220 30% 20%;
+    --ring: 270 60% 55%;
+
+    --radius: 1rem;
+
+    /* Biotech specific colors */
+    --bio-blue: 220 80% 50%;
+    --bio-purple: 270 60% 50%;
+    --bio-emerald: 160 70% 45%;
+    --bio-cyan: 190 80% 50%;
+    
+    /* Glass effect */
+    --glass-bg: 220 50% 12% / 0.4;
+    --glass-border: 220 40% 30% / 0.3;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(220 80% 50% / 0.2), hsl(270 60% 50% / 0.2));
+    --gradient-accent: linear-gradient(135deg, hsl(270 60% 50%), hsl(160 70% 45%));
+    --gradient-bg: linear-gradient(180deg, hsl(220 70% 8%), hsl(220 60% 12%));
+
+    /* Species colors */
+    --species-human: 220 80% 55%;
+    --species-chimp: 270 60% 55%;
+    --species-dog: 30 90% 50%;
+
+    --sidebar-background: 220 50% 10%;
+    --sidebar-foreground: 220 15% 95%;
+    --sidebar-primary: 270 60% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 40% 15%;
+    --sidebar-accent-foreground: 220 15% 95%;
+    --sidebar-border: 220 30% 18%;
+    --sidebar-ring: 270 60% 55%;
+  }
+
+  .dark {
+    --background: 220 70% 8%;
+    --foreground: 220 15% 95%;
+
+    --card: 220 50% 12%;
+    --card-foreground: 220 15% 95%;
+
+    --popover: 220 50% 10%;
+    --popover-foreground: 220 15% 95%;
+
+    --primary: 270 60% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 40% 18%;
+    --secondary-foreground: 220 15% 95%;
+
+    --muted: 220 40% 15%;
+    --muted-foreground: 220 15% 65%;
+
+    --accent: 160 70% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 30% 20%;
+    --input: 220 30% 20%;
+    --ring: 270 60% 55%;
+
+    --sidebar-background: 220 50% 10%;
+    --sidebar-foreground: 220 15% 95%;
+    --sidebar-primary: 270 60% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 40% 15%;
+    --sidebar-accent-foreground: 220 15% 95%;
+    --sidebar-border: 220 30% 18%;
+    --sidebar-ring: 270 60% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

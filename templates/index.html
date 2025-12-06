@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyseur Génomique IA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .dna-container { max-width: 800px; margin-top: 50px; }
+        .result-box { display: none; margin-top: 20px; padding: 20px; border-radius: 10px; }
+        .loading { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container dna-container">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+            <h2>🧬 Analyseur ADN Mitochondrial</h2>
+            <p>Humain vs Chimpanzé</p>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="dnaSequence" class="form-label">Collez votre séquence ADN ici (Format brut ou FASTA) :</label>
+                <textarea class="form-control" id="dnaSequence" rows="5" placeholder="ATCGGCTA..."></textarea>
+            </div>
+            
+            <div class="d-grid gap-2">
+                <button class="btn btn-success btn-lg" onclick="analyserADN()">
+                    🔍 Lancer l'analyse
+                </button>
+            </div>
+
+            <div id="loader" class="text-center loading mt-3">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p>Le réseau de neurones analyse la séquence...</p>
+            </div>
+
+            <div id="resultBox" class="result-box alert alert-secondary border">
+                <h3 class="text-center" id="predictionTitle">Résultat</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-6 text-center">
+                        <h5>Humain</h5>
+                        <div class="progress">
+                            <div id="barHuman" class="progress-bar bg-info" role="progressbar" style="width: 0%">0%</div>
+                        </div>
+                    </div>
+                    <div class="col-6 text-center">
+                        <h5>Chimpanzé</h5>
+                        <div class="progress">
+                            <div id="barChimp" class="progress-bar bg-warning" role="progressbar" style="width: 0%">0%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 text-center">
+                    <h4>Verdict : <span id="verdictLabel" class="badge bg-dark">?</span></h4>
+                    <small>Confiance : <span id="confianceValue">0%</span></small>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    async function analyserADN() {
+        const sequence = document.getElementById('dnaSequence').value;
+        const resultBox = document.getElementById('resultBox');
+        const loader = document.getElementById('loader');
+
+        if (!sequence) {
+            alert("Veuillez entrer une séquence ADN !");
+            return;
+        }
+
+        // Afficher le chargement
+        resultBox.style.display = 'none';
+        loader.style.display = 'block';
+
+        try {
+            // Appel au Backend Python
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sequence: sequence })
+            });
+
+            const data = await response.json();
+
+            // Cacher le chargement
+            loader.style.display = 'none';
+            resultBox.style.display = 'block';
+
+            if (data.error) {
+                alert("Erreur : " + data.error);
+                return;
+            }
+
+            // Mise à jour de l'interface
+            document.getElementById('verdictLabel').innerText = data.label;
+            
+            // Couleurs dynamiques
+            if (data.label === 'Humain') {
+                document.getElementById('verdictLabel').className = "badge bg-info";
+                resultBox.className = "result-box alert alert-info";
+            } else {
+                document.getElementById('verdictLabel').className = "badge bg-warning text-dark";
+                resultBox.className = "result-box alert alert-warning";
+            }
+
+            document.getElementById('confianceValue').innerText = data.confidence;
+
+            // Mise à jour des barres
+            const scoreH = data.scores.humain;
+            const scoreC = data.scores.chimp;
+            
+            document.getElementById('barHuman').style.width = scoreH;
+            document.getElementById('barHuman').innerText = scoreH;
+            
+            document.getElementById('barChimp').style.width = scoreC;
+            document.getElementById('barChimp').innerText = scoreC;
+
+        } catch (error) {
+            loader.style.display = 'none';
+            alert("Erreur de connexion au serveur !");
+            console.error(error);
+        }
+    }
+</script>
+
+</body>
+</html>
